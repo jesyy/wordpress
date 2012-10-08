@@ -433,8 +433,19 @@ sub {
 }
 
 /* Forms */
-input[type=text],
-input[type=password],
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
 textarea {
 	background: #fafafa;
 	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.1);
@@ -443,7 +454,19 @@ textarea {
 	border: 1px solid #ddd;
 	color: #888;
 }
-input[type=text]:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="email"]:focus,
+input[type="month"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="time"]:focus,
+input[type="url"]:focus,
+input[type="week"]:focus,
 textarea:focus {
 	color: #373737;
 }
@@ -451,8 +474,26 @@ textarea {
 	padding-left: 3px;
 	width: 98%;
 }
-input[type=text] {
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+input[type="week"] {
 	padding: 3px;
+}
+input[type="search"] {
+	-webkit-appearance: textfield;
+}
+input[type="search"]::-webkit-search-decoration {
+	display: none;
 }
 input#s {
 	background: url(images/search.png) no-repeat 5px 6px;
@@ -2071,6 +2112,18 @@ a.comment-reply-link > span {
 	width: 68.9%;
 }
 #respond input[type="text"],
+#respond input[type="password"],
+#respond input[type="date"],
+#respond input[type="datetime"],
+#respond input[type="datetime-local"],
+#respond input[type="email"],
+#respond input[type="month"],
+#respond input[type="number"],
+#respond input[type="search"],
+#respond input[type="tel"],
+#respond input[type="time"],
+#respond input[type="url"],
+#respond input[type="week"],
 #respond textarea {
 	background: #fff;
 	border: 4px solid #eee;
@@ -2108,6 +2161,18 @@ a.comment-reply-link > span {
 	z-index: 1;
 }
 #respond input[type="text"]:focus,
+#respond input[type="password"]:focus,
+#respond input[type="date"]:focus,
+#respond input[type="datetime"]:focus,
+#respond input[type="datetime-local"]:focus,
+#respond input[type="email"]:focus,
+#respond input[type="month"]:focus,
+#respond input[type="number"]:focus,
+#respond input[type="search"]:focus,
+#respond input[type="tel"]:focus,
+#respond input[type="time"]:focus,
+#respond input[type="url"]:focus,
+#respond input[type="week"]:focus,
 #respond textarea:focus {
 	text-indent: 0;
 	z-index: 1;
@@ -2197,7 +2262,19 @@ a.comment-reply-link > span {
 #respond label {
 	line-height: 2.2em;
 }
-#respond input[type=text] {
+#respond input[type="text"],
+#respond input[type="password"],
+#respond input[type="date"],
+#respond input[type="datetime"],
+#respond input[type="datetime-local"],
+#respond input[type="email"],
+#respond input[type="month"],
+#respond input[type="number"],
+#respond input[type="search"],
+#respond input[type="tel"],
+#respond input[type="time"],
+#respond input[type="url"],
+#respond input[type="week"] {
 	display: block;
 	height: 24px;
 	width: 75%;
@@ -2462,7 +2539,19 @@ p.comment-form-comment {
 		top: 2.2em;
 	}
 	/* Use the available space in the smaller comment form */
-	#respond input[type="text"] {
+	#respond input[type="text"],
+	#respond input[type="password"],
+	#respond input[type="date"],
+	#respond input[type="datetime"],
+	#respond input[type="datetime-local"],
+	#respond input[type="email"],
+	#respond input[type="month"],
+	#respond input[type="number"],
+	#respond input[type="search"],
+	#respond input[type="tel"],
+	#respond input[type="time"],
+	#respond input[type="url"],
+	#respond input[type="week"] {
 		width: 95%;
 	}
 	#respond .comment-form-author .required,

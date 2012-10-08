@@ -268,14 +268,29 @@ li.bypostauthor cite span {
 /* Form fields */
 input[type="text"],
 input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
 input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
 input[type="url"],
+input[type="week"],
 textarea {
 	padding: 6px;
 	padding: 0.428571429rem;
 	font-family: inherit;
 	border: 1px solid #ccc;
 	border-radius: 3px;
+}
+input[type="search"] {
+	-webkit-appearance: textfield;
+}
+input[type="search"]::-webkit-search-decoration {
+	display: none;
 }
 
 /* Responsive images */
@@ -1236,6 +1251,18 @@ a.comment-reply-link:hover {
 	line-height: 1.714285714;
 }
 #respond form input[type="text"],
+#respond form input[type="password"],
+#respond form input[type="date"],
+#respond form input[type="datetime"],
+#respond form input[type="datetime-local"],
+#respond form input[type="email"],
+#respond form input[type="month"],
+#respond form input[type="number"],
+#respond form input[type="search"],
+#respond form input[type="tel"],
+#respond form input[type="time"],
+#respond form input[type="url"],
+#respond form input[type="week"],
 #respond form textarea {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -1480,7 +1507,19 @@ img#wpstats {
 		font-size: 22px;
 		font-size: 1.571428571rem;
 	}
-	#respond form input[type="text"] {
+	#respond form input[type="text"],
+	#respond form input[type="password"],
+	#respond form input[type="date"],
+	#respond form input[type="datetime"],
+	#respond form input[type="datetime-local"],
+	#respond form input[type="email"],
+	#respond form input[type="month"],
+	#respond form input[type="number"],
+	#respond form input[type="search"],
+	#respond form input[type="tel"],
+	#respond form input[type="time"],
+	#respond form input[type="url"],
+	#respond form input[type="week"] {
 		width: 46.333333333%;
 	}
 	#respond form textarea.blog-textarea {
