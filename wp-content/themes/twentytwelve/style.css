@@ -1525,32 +1525,6 @@ img#wpstats {
 	}
 }
 
-/* Minimum width of 960 pixels. */
-@media screen and (min-width: 960px) {
-	body {
-		background-color: #e6e6e6;
-	}
-	body .site {
-		padding: 0 40px;
-		padding: 0 2.857142857rem;
-		margin-top: 48px;
-		margin-top: 3.428571429rem;
-		margin-bottom: 48px;
-		margin-bottom: 3.428571429rem;
-		box-shadow: 0 2px 6px rgba(100, 100, 100, 0.3);
-	}
-	body.custom-background-empty {
-		background-color: #fff;
-	}
-	body.custom-background-empty .site,
-	body.custom-background-white .site {
-		padding: 0;
-		margin-top: 0;
-		margin-bottom: 0;
-		box-shadow: none;
-	}
-}
-
 
 /* =Print
 ----------------------------------------------- */
@@ -1660,4 +1634,34 @@ img#wpstats {
 		margin-left: 50px;
 		margin-left: 3.57142857rem;
 	}
+}
+
+
+/* =IE 7 and 8
+----------------------------------------------- */
+
+.ie .assistive-text {
+	clip: rect(1px 1px 1px 1px); /* IE7 */
+}
+.ie .site {
+	margin: 48px auto;
+	max-width: 960px;
+}
+.ie .site-content {
+	float: left;
+	width: 65.104166667%;
+}
+.ie .full-width .site-content {
+	float: none;
+	width: 100%;
+}
+.ie .widget-area {
+	float: right;
+	width: 26.041666667%;
+}
+.ie img.size-full,
+.ie img.size-large,
+.ie img.header-image,
+.ie img.wp-post-image {
+	width: auto; /* Prevent stretching of full-size and large-size images with height and width attributes in IE8 */
 }
