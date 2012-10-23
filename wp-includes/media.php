@@ -943,11 +943,13 @@ function gd_edit_image_support($mime_type) {
  * @param int $height Image height
  * @return image resource
  */
-function wp_imagecreatetruecolor($width, $height) {
-	$img = imagecreatetruecolor($width, $height);
-	if ( is_resource($img) && function_exists('imagealphablending') && function_exists('imagesavealpha') ) {
-		imagealphablending($img, false);
-		imagesavealpha($img, true);
+function wp_imagecreatetruecolor( $width, $height ) {
+	$img = imagecreatetruecolor( $width, $height );
+	if ( is_resource( $img ) && function_exists( 'imagealphablending' ) && function_exists( 'imagesavealpha' ) ) {
+		if ( function_exists( 'imagecolortransparent' ) && function_exists( 'imagecolorallocatealpha' ) )
+			imagecolortransparent( $img, imagecolorallocatealpha( $img, 0, 0, 0, 127 ) );
+		imagealphablending( $img, false );
+		imagesavealpha( $img, true );
 	}
 	return $img;
 }
