@@ -146,7 +146,7 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 			return $resized;
 		}
 
-		return WP_Error( 'image_resize_error', __('Image resize failed.'), $this->file );
+		return new WP_Error( 'image_resize_error', __('Image resize failed.'), $this->file );
 	}
 
 	/**
@@ -222,7 +222,7 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 			return true;
 		}
 
-		return WP_Error( 'image_crop_error', __('Image crop failed.'), $this->file );
+		return new WP_Error( 'image_crop_error', __('Image crop failed.'), $this->file );
 	}
 
 	/**
@@ -237,7 +237,9 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 	 */
 	public function rotate( $angle ) {
 		if ( function_exists('imagerotate') ) {
-			$rotated = imagerotate( $this->image, $angle, 0 );
+			$transparent_index = imagecolortransparent( $this->image );
+			$rotated = imagerotate( $this->image, $angle, $transparent_index );
+			imagecolortransparent( $this->image, $transparent_index );
 
 			if ( is_resource( $rotated ) ) {
 				imagedestroy( $this->image );
@@ -246,7 +248,7 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 				return true;
 			}
 		}
-		return WP_Error( 'image_rotate_error', __('Image rotate failed.'), $this->file );
+		return new WP_Error( 'image_rotate_error', __('Image rotate failed.'), $this->file );
 	}
 
 	/**
@@ -267,13 +269,13 @@ class WP_Image_Editor_GD extends WP_Image_Editor {
 			$sw = $vert ? -$w : $w;
 			$sh = $horz ? -$h : $h;
 
-			if ( imagecopy( $dst, $this->image, 0, 0, $sx, $sy, $sw, $sh ) ) {
+			if ( imagecopymerge( $dst, $this->image, 0, 0, $sx, $sy, $sw, $sh, 50 ) ) {
 				imagedestroy( $this->image );
 				$this->image = $dst;
 				return true;
 			}
 		}
-		return WP_Error( 'image_flip_error', __('Image flip failed.'), $this->file );
+		return new WP_Error( 'image_flip_error', __('Image flip failed.'), $this->file );
 	}
 
 	/**
