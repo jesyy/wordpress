@@ -74,25 +74,7 @@ function wp_generate_attachment_metadata( $attachment_id, $file ) {
 		// Make the file path relative to the upload dir
 		$metadata['file'] = _wp_relative_upload_path($file);
 
-		// make thumbnails and other intermediate sizes
-		global $_wp_additional_image_sizes;
-
-		foreach ( get_intermediate_image_sizes() as $s ) {
-			$sizes[$s] = array( 'width' => '', 'height' => '', 'crop' => false );
-			if ( isset( $_wp_additional_image_sizes[$s]['width'] ) )
-				$sizes[$s]['width'] = intval( $_wp_additional_image_sizes[$s]['width'] ); // For theme-added sizes
-			else
-				$sizes[$s]['width'] = get_option( "{$s}_size_w" ); // For default sizes set in options
-			if ( isset( $_wp_additional_image_sizes[$s]['height'] ) )
-				$sizes[$s]['height'] = intval( $_wp_additional_image_sizes[$s]['height'] ); // For theme-added sizes
-			else
-				$sizes[$s]['height'] = get_option( "{$s}_size_h" ); // For default sizes set in options
-			if ( isset( $_wp_additional_image_sizes[$s]['crop'] ) )
-				$sizes[$s]['crop'] = intval( $_wp_additional_image_sizes[$s]['crop'] ); // For theme-added sizes
-			else
-				$sizes[$s]['crop'] = get_option( "{$s}_crop" ); // For default sizes set in options
-		}
-
+		$sizes = get_intermediate_image_sizes( 'full' );
 		$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes );
 
 		$editor = WP_Image_Editor::get_instance( $file );

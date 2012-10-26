@@ -32,39 +32,21 @@
  * @return array Width and height of what the result image should resize to.
  */
 function image_constrain_size_for_editor($width, $height, $size = 'medium') {
-	global $content_width, $_wp_additional_image_sizes;
+	global $content_width;
+
+	if ( 'thumb' == $size )
+		$size = 'thumbnail';
 
 	if ( is_array($size) ) {
-		$max_width = $size[0];
-		$max_height = $size[1];
+		list( $max_width, $max_height ) = $size;
 	}
-	elseif ( $size == 'thumb' || $size == 'thumbnail' ) {
-		$max_width = intval(get_option('thumbnail_size_w'));
-		$max_height = intval(get_option('thumbnail_size_h'));
-		// last chance thumbnail size defaults
-		if ( !$max_width && !$max_height ) {
-			$max_width = 128;
-			$max_height = 96;
-		}
-	}
-	elseif ( $size == 'medium' ) {
-		$max_width = intval(get_option('medium_size_w'));
-		$max_height = intval(get_option('medium_size_h'));
-		// if no width is set, default to the theme content width if available
-	}
-	elseif ( $size == 'large' ) {
-		// We're inserting a large size image into the editor. If it's a really
-		// big image we'll scale it down to fit reasonably within the editor
-		// itself, and within the theme's content width if it's known. The user
-		// can resize it in the editor if they wish.
-		$max_width = intval(get_option('large_size_w'));
-		$max_height = intval(get_option('large_size_h'));
-		if ( intval($content_width) > 0 )
-			$max_width = min( intval($content_width), $max_width );
-	} elseif ( isset( $_wp_additional_image_sizes ) && count( $_wp_additional_image_sizes ) && in_array( $size, array_keys( $_wp_additional_image_sizes ) ) ) {
-		$max_width = intval( $_wp_additional_image_sizes[$size]['width'] );
-		$max_height = intval( $_wp_additional_image_sizes[$size]['height'] );
-		if ( intval($content_width) > 0 && is_admin() ) // Only in admin. Assume that theme authors know what they're doing.
+	elseif ( image_size_exists( $size ) ) {
+		$size_obj = get_image_size( $size );
+
+		$max_width = $size_obj->width;
+		$max_height = $size_obj->height;
+
+		if ( intval( $content_width ) > 0 && ( 'large' == $size || is_admin() ) )
 			$max_width = min( intval($content_width), $max_width );
 	}
 	// $size == 'full' has no constraint
@@ -176,14 +158,102 @@ function image_downsize($id, $size = 'medium') {
 }
 
 /**
- * Registers a new image size
+ * Register a new image size.
  *
  * @since 2.9.0
+ *
+ * @param string $name The new image size name
+ * @param array $args The new image size parameters
  */
-function add_image_size( $name, $width = 0, $height = 0, $crop = false ) {
+function add_image_size( $name, $args ) {
 	global $_wp_additional_image_sizes;
-	$_wp_additional_image_sizes[$name] = array( 'width' => absint( $width ), 'height' => absint( $height ), 'crop' => (bool) $crop );
+
+	if ( !is_array( $args ) ) {
+		$argv = func_get_args();
+		$name = array_shift( $argv );
+		$args = wp_numeric_to_assoc( $argv, array( 'width', 'height', 'crop' ) );
+	}
+
+	$defaults = array(
+		'width' => 0,
+		'height' => 0,
+		'crop' => false,
+	);
+
+	$size = array_merge( $defaults, $args );
+
+	$size['width'] = absint( $size['width'] );
+	$size['height'] = absint( $size['height'] );
+	$size['crop'] = (bool) $size['height'];
+
+	$_wp_additional_image_sizes[ $name ] = $size;
 }
+
+/**
+ * Get a registered image size object by name.
+ *
+ * @since 3.5.0
+ *
+ * @param string $image_size Image size name
+ * @return bool|array
+ */
+function get_image_size( $image_size ) {
+	global $_wp_additional_image_sizes;
+
+	if ( !isset( $_wp_additional_image_sizes[ $image_size ] ) )
+		return false;
+
+	return $_wp_additional_image_sizes[ $image_size ];
+}
+
+/**
+ * Checks if an image size is registered.
+ *
+ * @since 3.5.0
+ *
+ * @param string $image_size Image size name
+ * @return bool
+ */
+function image_size_exists( $image_size ) {
+	return (bool) get_image_size( $image_size );
+}
+
+/**
+ * Get the available image sizes.
+ *
+ * @since 3.0.0
+ *
+ * @param string $output What to return. 'names' just returns the name of the size.
+ * @param array $filters key=>value pairs used for filtering the list of sizes.
+ * @param string $operator The operator used for combining the filters. Can be 'and', 'or' and 'not'.
+ *
+ * @return array
+ */
+function get_intermediate_image_sizes( $output = 'names', $filters = array(), $operator = 'and' ) {
+	global $_wp_additional_image_sizes;
+
+	$field = ( 'names' == $output ) ? 'name' : false;
+
+	$list = wp_filter_object_list( $_wp_additional_image_sizes, $filters, $operator, $field );
+
+	if ( 'names' == $output )
+		return apply_filters( 'intermediate_image_sizes', $list );
+
+	return $list;
+}
+
+function create_initial_image_sizes() {
+	foreach ( array( 'thumbnail', 'medium', 'large' ) as $s ) {
+		$args = array(
+			'width' => get_option( "{$s}_size_w" ),
+			'height' => get_option( "{$s}_size_h" ),
+			'crop' => get_option( "{$s}_crop" ),
+		);
+
+		add_image_size( $s, $args );
+	}
+}
+add_action( 'init', 'create_initial_image_sizes', 0 ); // highest priority
 
 /**
  * Registers an image size for the post thumbnail
@@ -191,7 +261,11 @@ function add_image_size( $name, $width = 0, $height = 0, $crop = false ) {
  * @since 2.9.0
  */
 function set_post_thumbnail_size( $width = 0, $height = 0, $crop = false ) {
-	add_image_size( 'post-thumbnail', $width, $height, $crop );
+	add_image_size( 'post-thumbnail', array(
+		'width' => $width,
+		'height' => $height,
+		'crop' => $crop,
+	) );
 }
 
 /**
@@ -470,20 +544,6 @@ function image_get_intermediate_size($post_id, $size='thumbnail') {
 		$data['url'] = path_join( dirname($file_url), $data['file'] );
 	}
 	return $data;
-}
-
-/**
- * Get the available image sizes
- * @since 3.0.0
- * @return array Returns a filtered array of image size strings
- */
-function get_intermediate_image_sizes() {
-	global $_wp_additional_image_sizes;
-	$image_sizes = array('thumbnail', 'medium', 'large'); // Standard sizes
-	if ( isset( $_wp_additional_image_sizes ) && count( $_wp_additional_image_sizes ) )
-		$image_sizes = array_merge( $image_sizes, array_keys( $_wp_additional_image_sizes ) );
-
-	return apply_filters( 'intermediate_image_sizes', $image_sizes );
 }
 
 /**
