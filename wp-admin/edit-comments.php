@@ -105,7 +105,7 @@ wp_enqueue_script('admin-comments');
 enqueue_comment_hotkeys_js();
 
 if ( $post_id )
-	$title = sprintf(__('Comments on &#8220;%s&#8221;'), wp_html_excerpt(_draft_or_post_title($post_id), 50));
+	$title = sprintf(__('Comments on &#8220;%s&#8221;'), wp_html_excerpt(_draft_or_post_title($post_id), 50, true));
 else
 	$title = __('Comments');
 
@@ -146,14 +146,14 @@ if ( $post_id )
 	echo sprintf(__('Comments on &#8220;%s&#8221;'),
 		sprintf('<a href="%s">%s</a>',
 			get_edit_post_link($post_id),
-			wp_html_excerpt(_draft_or_post_title($post_id), 50)
+			wp_html_excerpt(_draft_or_post_title($post_id), 50, true)
 		)
 	);
 else
 	echo __('Comments');
 
 if ( isset($_REQUEST['s']) && $_REQUEST['s'] )
-	printf( '<span class="subtitle">' . sprintf( __( 'Search results for &#8220;%s&#8221;' ), wp_html_excerpt( esc_html( stripslashes( $_REQUEST['s'] ) ), 50 ) ) . '</span>' ); ?>
+	printf( '<span class="subtitle">' . sprintf( __( 'Search results for &#8220;%s&#8221;' ), wp_html_excerpt( esc_html( stripslashes( $_REQUEST['s'] ) ), 50, true ) ) . '</span>' ); ?>
 </h2>
 
 <?php

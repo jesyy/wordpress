@@ -3088,14 +3088,17 @@ function wp_sprintf_l($pattern, $args) {
  *
  * @param integer $str String to get the excerpt from.
  * @param integer $count Maximum number of characters to take.
+ * @param bool $append_ellipsis optional Whether to append truncated string with an ellipsis. Defaults to false.
  * @return string The excerpt.
  */
-function wp_html_excerpt( $str, $count ) {
+function wp_html_excerpt( $str, $count, $append_ellipsis = false ) {
 	$str = wp_strip_all_tags( $str, true );
-	$str = mb_substr( $str, 0, $count );
+	$new_str = mb_substr( $str, 0, $count );
 	// remove part of an entity at the end
-	$str = preg_replace( '/&[^;\s]{0,6}$/', '', $str );
-	return $str;
+	$new_str = preg_replace( '/&[^;\s]{0,6}$/', '', $new_str );
+	if( $append_ellipsis && strlen( $new_str ) < strlen( $str ) )
+		$new_str .= '&hellip;';
+	return $new_str;
 }
 
 /**

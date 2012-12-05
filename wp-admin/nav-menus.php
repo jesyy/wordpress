@@ -405,10 +405,7 @@ if ( ! $nav_menu_selected_title && is_nav_menu( $nav_menu_selected_id ) ) {
 
 // Generate truncated menu names
 foreach( (array) $nav_menus as $key => $_nav_menu ) {
-	$_nav_menu->truncated_name = trim( wp_html_excerpt( $_nav_menu->name, 40 ) );
-	if ( $_nav_menu->truncated_name != $_nav_menu->name )
-		$_nav_menu->truncated_name .= '&hellip;';
-
+	$_nav_menu->truncated_name = trim( wp_html_excerpt( $_nav_menu->name, 40, true ) );
 	$nav_menus[$key]->truncated_name = $_nav_menu->truncated_name;
 }
 
