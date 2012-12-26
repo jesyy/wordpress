@@ -1756,7 +1756,7 @@ function do_trackbacks($post_id) {
 	else
 		$excerpt = apply_filters('the_excerpt', $post->post_excerpt);
 	$excerpt = str_replace(']]>', ']]&gt;', $excerpt);
-	$excerpt = wp_html_excerpt($excerpt, 252, true);
+	$excerpt = wp_html_excerpt( $excerpt, 252, array( 'append_ellipsis' => true ) );
 
 	$post_title = apply_filters('the_title', $post->post_title, $post->ID);
 	$post_title = strip_tags($post_title);

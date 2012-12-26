@@ -1108,7 +1108,13 @@ function get_media_item( $attachment_id, $args = null ) {
 	}
 
 	$display_title = ( !empty( $title ) ) ? $title : $filename; // $title shouldn't ever be empty, but just in case
-	$display_title = $show_title ? "<div class='filename new'><span class='title'>" . wp_html_excerpt( $display_title, 60, true ) . "</span></div>" : '';
+	$display_title = "<div class='filename new'><span class='title'>" .
+					 wp_html_excerpt( $display_title, 60,
+									  array( 'append_ellipsis' => true ) ) .
+					 "</span></div>";
+	if ( ! $show_title ) {
+		$display_title = '';
+	}
 
 	$gallery = ( ( isset( $_REQUEST['tab'] ) && 'gallery' == $_REQUEST['tab'] ) || ( isset( $redir_tab ) && 'gallery' == $redir_tab ) );
 	$order = '';

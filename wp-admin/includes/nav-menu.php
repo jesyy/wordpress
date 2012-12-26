@@ -501,7 +501,7 @@ function wp_nav_menu_locations_meta_box() {
 					<?php foreach ( $menus as $menu ) : ?>
 					<option<?php selected( isset( $menu_locations[ $location ] ) && $menu_locations[ $location ] == $menu->term_id ); ?>
 						value="<?php echo $menu->term_id; ?>"><?php
-						echo wp_html_excerpt( $menu->name, 40, true );
+						echo wp_html_excerpt( $menu->name, 40, array( 'append_ellipsis' => true ) );
 					?></option>
 					<?php endforeach; ?>
 				</select>

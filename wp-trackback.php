@@ -87,8 +87,8 @@ if ( !empty($tb_url) && !empty($title) ) {
 	if ( !pings_open($tb_id) )
 		trackback_response(1, 'Sorry, trackbacks are closed for this item.');
 
-	$title =  wp_html_excerpt( $title, 250, true );
-	$excerpt = wp_html_excerpt( $excerpt, 252, true );
+	$title =  wp_html_excerpt( $title, 250, array( 'append_ellipsis' => true ) );
+	$excerpt = wp_html_excerpt( $excerpt, 252, array( 'append_ellipsis' => true ) );
 
 	$comment_post_ID = (int) $tb_id;
 	$comment_author = $blog_name;

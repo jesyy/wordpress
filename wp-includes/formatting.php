@@ -3084,19 +3084,29 @@ function wp_sprintf_l($pattern, $args) {
  * be counted as one character. For example &amp; will be counted as 4, &lt; as
  * 3, etc.
  *
+ * The list of arguments that $options can contain, which will overwrite the
+ * defaults:
+ *
+ * append_ellipsis - Whether to append truncated string with an ellipsis.
+ * Defaults to false.
+ *
  * @since 2.5.0
  *
  * @param integer $str String to get the excerpt from.
  * @param integer $count Maximum number of characters to take.
- * @param bool $append_ellipsis optional Whether to append truncated string with an ellipsis. Defaults to false.
+ * @param string|array $options Additional options affecting extracted output.
  * @return string The excerpt.
  */
-function wp_html_excerpt( $str, $count, $append_ellipsis = false ) {
+function wp_html_excerpt( $str, $count, $options = '' ) {
+	$defaults = array(
+		'append_ellipsis' => false
+	);
+	$options = wp_parse_args( $options, $defaults );
 	$str = wp_strip_all_tags( $str, true );
 	$new_str = mb_substr( $str, 0, $count );
 	// remove part of an entity at the end
 	$new_str = preg_replace( '/&[^;\s]{0,6}$/', '', $new_str );
-	if( $append_ellipsis && strlen( $new_str ) < strlen( $str ) )
+	if( $options['append_ellipsis'] && strlen( $new_str ) < strlen( $str ) )
 		$new_str .= '&hellip;';
 	return $new_str;
 }
