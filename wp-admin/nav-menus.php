@@ -472,7 +472,8 @@ require_once( './admin-header.php' );
 		<form id="nav-menu-meta" action="<?php echo admin_url( 'nav-menus.php' ); ?>" class="nav-menu-meta" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="menu" id="nav-menu-meta-object-id" value="<?php echo esc_attr( $nav_menu_selected_id ); ?>" />
 			<input type="hidden" name="action" value="add-menu-item" />
-			<?php wp_nonce_field( 'add-menu_item', 'menu-settings-column-nonce' ); ?>
+			<?php wp_nonce_field( array( 'action' => 'add-menu_item',
+										 'name' => 'menu-settings-column-nonce' ) ); ?>
 			<?php do_meta_boxes( 'nav-menus', 'side', null ); ?>
 		</form>
 
@@ -564,9 +565,15 @@ require_once( './admin-header.php' );
 							</div><!-- END .major-publishing-actions -->
 						</div><!-- END #submitpost .submitbox -->
 						<?php
-						wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false );
-						wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false );
-						wp_nonce_field( 'update-nav_menu', 'update-nav-menu-nonce' );
+						wp_nonce_field( array( 'action' => 'closedpostboxes',
+											   'name' => 'closedpostboxesnonce',
+											   'id' => 'closedpostboxesnonce',
+											   'referrer' => false ) );
+						wp_nonce_field( array( 'action'   => 'meta-box-order',
+											   'name'     => 'meta-box-order-nonce',
+											   'referrer' => false ) );
+						wp_nonce_field( array( 'action' => 'update-nav_menu',
+											   'name' => 'update-nav-menu-nonce' ) );
 						?>
 						<input type="hidden" name="action" value="update" />
 						<input type="hidden" name="menu" id="menu" value="<?php echo esc_attr( $nav_menu_selected_id ); ?>" />
