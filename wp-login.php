@@ -704,13 +704,17 @@ default:
 
 <?php if ( !$interim_login ) { ?>
 <p id="nav">
-<?php if ( isset($_GET['checkemail']) && in_array( $_GET['checkemail'], array('confirm', 'newpass') ) ) : ?>
-<?php elseif ( get_option('users_can_register') ) : ?>
-<a href="<?php echo esc_url( site_url( 'wp-login.php?action=register', 'login' ) ); ?>"><?php _e( 'Register' ); ?></a> |
-<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" title="<?php esc_attr_e( 'Password Lost and Found' ); ?>"><?php _e( 'Lost your password?' ); ?></a>
-<?php else : ?>
-<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" title="<?php esc_attr_e( 'Password Lost and Found' ); ?>"><?php _e( 'Lost your password?' ); ?></a>
-<?php endif; ?>
+<?php
+	$lost_password_link = '<a href="' . esc_url( wp_lostpassword_url() ) . '" title="' . esc_attr__( 'Password Lost and Found' ) . '">' . __( 'Lost your password?' ) . '</a>';
+	if ( isset( $_GET['checkemail'] ) && in_array( $_GET['checkemail'], array( 'confirm', 'newpass' ) ) ) {
+		// Intentionally empty.
+	} elseif ( get_option( 'users_can_register' ) ) {
+		?><a href="<?php echo esc_url( site_url( 'wp-login.php?action=register', 'login' ) ); ?>"><?php _e( 'Register' ); ?></a> | <?php
+		echo $lost_password_link;
+	} else {
+		echo $lost_password_link;
+	}
+?>
 </p>
 <?php } ?>
 
